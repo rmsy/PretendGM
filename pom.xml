@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.github.rmsy</groupId>
+    <artifactId>PretendGM</artifactId>
+    <version>0.1-SNAPSHOT</version>
+
+    <name>P(retend)GM</name>
+    <description>P(retend)GM is a mock implementation of PGM's public APIs.</description>
+    <url>https://github.com/rmsy/PretendGM</url>
+    <inceptionYear>2013</inceptionYear>
+
+    <licenses>
+        <license>
+            <name>GNU GENERAL PUBLIC LICENSE</name>
+            <url>http://www.gnu.org/licenses/gpl-3.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <id>rmsy</id>
+            <name>Isaac Moore</name>
+            <email>rmsy@me.com</email>
+            <url>https://github.com/rmsy</url>
+            <roles>
+                <role>Project direction</role>
+                <role>Programming</role>
+            </roles>
+            <timezone>-6</timezone>
+            <properties>
+                <skype>ramseylc</skype>
+                <twitter>iamramsey</twitter>
+            </properties>
+        </developer>
+    </developers>
+
+    <scm>
+        <connection>scm:git:https://github.com/rmsy/PretendGM.git</connection>
+        <url>https://github.com/rmsy/PretendGM</url>
+    </scm>
+
+    <issueManagement>
+        <system>GitHub Issues</system>
+        <url>https://github.com/rmsy/PretendGM/issues</url>
+    </issueManagement>
+
+    <properties>
+        <!-- The prefix to use when logging to the console -->
+        <plugin.prefix>PretendGM</plugin.prefix>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.bukkit</groupId>
+            <artifactId>bukkit</artifactId>
+            <version>1.5.2-R0.1</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>tc.oc</groupId>
+            <artifactId>api</artifactId>
+            <version>0.1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.sk89q</groupId>
+            <artifactId>command-framework-core</artifactId>
+            <version>0.4-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.sk89q</groupId>
+            <artifactId>command-framework-bukkit</artifactId>
+            <version>0.4-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
+
+    <repositories>
+        <repository>
+            <id>bukkit-repo</id>
+            <name>Bukkit repo</name>
+            <url>http://repo.bukkit.org/content/groups/public</url>
+        </repository>
+        <repository>
+            <id>overcast-repo</id>
+            <name>Overcast Network repo</name>
+            <url>http://repo.oc.tc/content/groups/public/</url>
+        </repository>
+    </repositories>
+
+    <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
+    </build>
+
+</project>
