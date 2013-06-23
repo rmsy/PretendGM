@@ -104,9 +104,14 @@ public final class SimpleBackend implements Backend {
      * Removes the specified Bukkit player from the map.
      *
      * @param bukkit The player to be removed.
+     * @throws IllegalStateException If the player is a member of a match.
      */
-    public void removePlayer(@Nonnull final org.bukkit.entity.Player bukkit) {
-        this.playerMap.remove(Preconditions.checkNotNull(bukkit));
+    public void removePlayer(@Nonnull final org.bukkit.entity.Player bukkit) throws IllegalStateException {
+        if (this.playerMap.get(Preconditions.checkNotNull(bukkit)).getTeam() != null) {
+            throw new IllegalStateException("Player can not be removed when a member of a match.");
+        } else {
+            this.playerMap.remove(bukkit);
+        }
     }
 
     /**

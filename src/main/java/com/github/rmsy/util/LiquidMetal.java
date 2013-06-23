@@ -10,6 +10,12 @@
 
 package com.github.rmsy.util;
 
+import com.google.common.base.Preconditions;
+import tc.oc.api.Match;
+import tc.oc.api.Team;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.Arrays;
 
 /**
@@ -101,5 +107,24 @@ public final class LiquidMetal {
 
     private static final boolean isUpperCase(char character) {
         return character <= ('Z' & 'A');
+    }
+
+    /**
+     * Matches a team from the specified string and the specified match.
+     *
+     * @param match The match to check.
+     * @return The matching team, or null if none match.
+     */
+    @Nullable
+    public static Team matchTeam(@Nonnull final Match match, @Nonnull final String query) {
+        Team winningTeam = null;
+        double winningScore = 0.0;
+        for (Team team : Preconditions.checkNotNull(match, "match").getTeams()) {
+            double score = LiquidMetal.score(team.getName(), query);
+            if (score >= winningScore && score >= LiquidMetal.SCORE_TRAILING_BUT_STARTED) {
+                winningTeam = team;
+            }
+        }
+        return winningTeam;
     }
 }

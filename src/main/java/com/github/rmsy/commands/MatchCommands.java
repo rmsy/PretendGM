@@ -10,7 +10,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import tc.oc.api.Match;
 import tc.oc.api.MatchManager;
-import tc.oc.api.Team;
 import tc.oc.api.backend.BackendManager;
 
 import javax.annotation.Nonnull;
@@ -37,7 +36,7 @@ public final class MatchCommands {
     }
 
     @Command(
-            aliases = {"start", "begin", "play"},
+            aliases = {"start", "begin"},
             desc = "Starts the match.",
             anyFlags = false,
             min = 0,
@@ -63,34 +62,26 @@ public final class MatchCommands {
             desc = "Ends the match.",
             anyFlags = false,
             min = 0,
-            max = -1
+            max = -1,
+            usage = "[team] [world]"
     )
+    //  TODO: do.
     public static void endMatch(@Nonnull final CommandContext arguments, @Nonnull final CommandSender sender) throws CommandException {
-        Team winningTeam = null;
-        Match match = MatchManager.getMatch(((Player) Preconditions.checkNotNull(sender, "sender")).getWorld());
-        if (Preconditions.checkNotNull(arguments, "arguments").argsLength() >= 1) {
-            String userTeam = arguments.getJoinedStrings(0);
-            double highestScore = 0.0;
-            Team highestScoringTeam = null;
-            for (Team team : match.getParticipatingTeams()) {
-                double score = LiquidMetal.score(team.getName(), userTeam);
-                if (score > highestScore && score >= LiquidMetal.SCORE_TRAILING_BUT_STARTED) {
-                    highestScore = score;
-                    highestScoringTeam = team;
-                }
-            }
-
-            if (highestScoringTeam != null) {
-                winningTeam = highestScoringTeam;
-            } else {
+        try {
+            Match match = Preconditions.checkNotNull(MatchManager.getMatch(((Player) Preconditions.checkNotNull(sender, "sender")).getWorld()));
+        } catch (NullPointerException exception) {
+            throw new WrappedCommandException(new IllegalStateException("Match can not be ended in world where no match is present."))
+        }
+        if (Preconditions.checkNotNull(arguments, "arguments").argsLength() > 0) {
+            try {
+                match.end(Preconditions.checkNotNull(LiquidMetal.matchTeam(match, arguments.getString(0))));
+            } catch (IllegalStateException exception) {
+                throw new WrappedCommandException(exception);
+            } catch (NullPointerException exception) {
                 throw new WrappedCommandException(new IllegalArgumentException("Match can not be ended in favor of a non-existent team."));
             }
-        }
-
-        try {
-            match.end(winningTeam);
-        } catch (IllegalStateException exception) {
-            throw new WrappedCommandException(exception);
+        } else {
+            match.end();
         }
     }
 
@@ -100,11 +91,11 @@ public final class MatchCommands {
                 desc = "Command for handling matches.",
                 min = 1,
                 max = -1,
-                usage = "<create | start | end [team]>"
+                usage = "<create | start | end>"
         )
         @NestedCommand(value = MatchCommands.class, executeBody = false)
-        public static void matchCommands(@Nonnull final CommandContext arguments, @Nonnull final CommandSender sender) {
-            //  never executed
+        public static void matchCommand(@Nonnull final CommandContext arguments, @Nonnull final CommandSender sender) {
+            //  Never executed
         }
     }
 }

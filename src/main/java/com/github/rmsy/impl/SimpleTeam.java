@@ -4,6 +4,7 @@ import com.google.common.base.Preconditions;
 import org.bukkit.ChatColor;
 import tc.oc.api.Player;
 import tc.oc.api.Team;
+import tc.oc.api.backend.BackendManager;
 
 import javax.annotation.Nonnull;
 import java.util.HashSet;
@@ -91,7 +92,7 @@ public class SimpleTeam implements Team {
     @Nonnull
     @Override
     public Set<Player> getMembers() {
-        return this.members;
+        return new HashSet<Player>(this.members);
     }
 
     /**
@@ -136,6 +137,28 @@ public class SimpleTeam implements Team {
     }
 
     /**
+     * Gets the team's initial name, as defined by the map.
+     *
+     * @return The team's initial name, as defined by the map.
+     */
+    @Nonnull
+    @Override
+    public String getInitialName() {
+        return this.initialName;
+    }
+
+    /**
+     * Gets the team's colored name.
+     *
+     * @return The team's colored name.
+     */
+    @Nonnull
+    @Override
+    public String getColoredName() {
+        return this.color + this.name;
+    }
+
+    /**
      * Sets the team's name.
      *
      * @param s The team's name.
@@ -154,6 +177,17 @@ public class SimpleTeam implements Team {
     @Override
     public ChatColor getColor() {
         return this.color;
+    }
+
+    /**
+     * Gets the team's initial chat display color, as defined by the map.
+     *
+     * @return The team's initial chat display color, as defined by the map.
+     */
+    @Nonnull
+    @Override
+    public ChatColor getInitialColor() {
+        return this.initialColor;
     }
 
     /**
@@ -180,35 +214,22 @@ public class SimpleTeam implements Team {
     }
 
     /**
-     * Gets the team's initial chat display color, as defined by the map.
+     * Adds a new member to the team.
      *
-     * @return The team's initial chat display color, as defined by the map.
+     * @param player The member to be added.
      */
-    @Nonnull
-    @Override
-    public ChatColor getInitialColor() {
-        return this.initialColor;
+    public void addMember(@Nonnull final Player player) {
+        this.members.add(Preconditions.checkNotNull(player, "player"));
+        ((SimpleBackend) BackendManager.getBackend()).mapPlayer(player.getBukkit(), player);
     }
 
     /**
-     * Gets the team's initial name, as defined by the map.
+     * Removes a member from the team.
      *
-     * @return The team's initial name, as defined by the map.
+     * @param player The member to be removed.
      */
-    @Nonnull
-    @Override
-    public String getInitialName() {
-        return this.initialName;
-    }
-
-    /**
-     * Gets the team's colored name.
-     *
-     * @return The team's colored name.
-     */
-    @Nonnull
-    @Override
-    public String getColoredName() {
-        return this.color + this.name;
+    public void removeMember(@Nonnull final Player player) {
+        this.members.remove(Preconditions.checkNotNull(player, "player"));
+        ((SimpleBackend) BackendManager.getBackend()).removePlayer(player.getBukkit());
     }
 }

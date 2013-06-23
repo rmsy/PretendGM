@@ -284,4 +284,18 @@ public class SimpleMatch implements Match {
     public Team getFirstOther(Team team) {
         return null;
     }
+
+    /**
+     * Permanently adds the specified team to the match.
+     *
+     * @param team The team to be added.
+     * @throws IllegalStateException If the match is in progress.
+     */
+    public void addTeam(@Nonnull final Team team) throws IllegalStateException {
+        if (!this.running) {
+            this.teams.add(Preconditions.checkNotNull(team));
+        } else {
+            throw new IllegalStateException("Team can not be created when match in current world is running.");
+        }
+    }
 }
